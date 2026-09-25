@@ -1,0 +1,31 @@
+# 分区表 —— 只在「这个 Demo」生效，其它 Demo 不受影响
+#
+# 怎么生效的：arduino-esp32 的 platform.txt 里有三条 prebuild 钩子，按
+#   平台方案  <  variant  <  本目录（sketch 源码目录）
+# 的顺序覆盖 partitions.csv，本目录优先级最高。
+# 所以这里放一份就能改分区表，**不用动 build.sh 里那串 FQBN**。
+#
+# 内容 = 官方 app3M_fat9M_16MB.csv 原样照抄，只把 ffat 那一行换掉：
+#   ffat, data, fat    ->    slides, data, spiffs
+#
+# 为什么用 spiffs 这个 subtype：LittleFS 库只要能按名字找到分区就行 ——
+#   esp_littlefs 在传了 label 时用的是 ESP_PARTITION_SUBTYPE_ANY，
+#   所以 spiffs(0x82) 和 littlefs(0x83) 都能挂上。选 spiffs 只是因为它是
+#   Arduino 官方各个 spiffs 方案（default_16MB / large_spiffs_8MB…）的惯例写法。
+#
+# 为什么分区名不叫 "littlefs"：gen_esp32part.py 里 "littlefs" 是个**子类型关键字**
+#   （对应 subtype 0x83）。名字恰好等于某个 subtype 关键字、而 subtype 列又不是它，
+#   编译时会报
+#       WARNING: Partition has name 'littlefs' which is a partition subtype...
+#   功能不受影响（type/subtype 由下面这几列决定，跟名字无关），但会污染构建输出。
+#   叫 slides 又清楚又不撞车。.ino 里 LittleFS.begin() 的 label 要和这里对上。
+#
+# 大小一个字节没变，仍是 9.875 MB（够放约 690 张 15000 字节的图）。
+#
+# Name,   Type, SubType, Offset,  Size, Flags
+nvs,      data, nvs,     0x9000,  0x5000,
+otadata,  data, ota,     0xe000,  0x2000,
+app0,     app,  ota_0,   0x10000, 0x300000,
+app1,     app,  ota_1,   0x310000,0x300000,
+slides,   data, spiffs,  0x610000,0x9E0000,
+coredump, data, coredump,0xFF0000,0x10000,

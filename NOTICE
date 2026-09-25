@@ -1,0 +1,28 @@
+第三方组件声明
+================================================================
+
+本项目（waveshare-demo）**原创代码**采用 MIT 许可，全文见 LICENSE。
+
+但下面这些文件**不是本项目原创**，来自第三方，采用 **Apache License 2.0**：
+
+    arduino/*/ST7305_U8g2.h
+    arduino/*/ST7305_U8g2.cpp
+
+  （`arduino/` 下**每个 Demo 各带一份**，目前 4 个 Demo × 2 个文件 = 8 份，
+    内容彼此逐字节一致。不合一份共用是因为每个 Demo 要能单独编译。
+    以后新增 Demo 若也带这两份，用这个通配符写法不必再改这里。）
+
+  来源   waveshareteam/ESP32-S3-RLCD-4.2
+         https://github.com/waveshareteam/ESP32-S3-RLCD-4.2
+         路径：02_Example/Arduino/10_U8G2_Test/
+  版权   归 Waveshare 及原作者所有
+  许可   Apache License 2.0，全文见 LICENSE-Apache-2.0.txt
+         或 https://www.apache.org/licenses/LICENSE-2.0
+
+核对记录（2026-09-25）
+----------------------------------------------------------------
+上述文件与上游 main 分支**逐字节一致**（`diff` 无差异），
+**未作任何修改**。因此无需按 Apache-2.0 §4(b) 声明修改内容。
+
+如果将来修改了这几个文件，请在此处补一句改了什么 —— Apache-2.0 要求
+"carry prominent notices stating that You changed the files"。
